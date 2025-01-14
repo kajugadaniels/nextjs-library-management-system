@@ -11,7 +11,6 @@ const Header = () => {
   const pathname = usePathname();
   return (
     <header className="my-10 flex justify-between gap-5">
-      Header
       <Link href="/">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
       </Link>
@@ -26,11 +25,6 @@ const Header = () => {
           >
             Library
           </Link>
-        </li>
-        <li>
-          <form className="mb-10">
-            <Button>Logout</Button>
-          </form>
         </li>
       </ul>
     </header>
