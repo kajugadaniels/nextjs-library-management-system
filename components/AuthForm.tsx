@@ -10,7 +10,7 @@ interface Props<T extends FieldValues> {
 const AuthForm = ({ type, schema, defualtValues, onSubmit }: Props) => {
   return (
     <div>
-      AuthForm
+      AuthForm -- {type}
       <p>Text</p>
     </div>
   );
