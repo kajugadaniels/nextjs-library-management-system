@@ -8,7 +8,7 @@ import {
   useForm,
   UseFormReturn,
   FieldValues,
-  Path, // Ensure Path is imported if you're using it
+  Path,
 } from "react-hook-form";
 import { z, ZodType } from "zod";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import ImageUpload from "@/components/ImageUpload";
 
 interface Props<T extends FieldValues> {
@@ -32,19 +33,19 @@ interface Props<T extends FieldValues> {
   type: "SIGN_IN" | "SIGN_UP";
 }
 
-// Removed unused formSchema since schema is passed as a prop
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
 });
 
-const AuthForm = <T extends FieldValues>({
+// Changed to a function declaration with generics
+function AuthForm<T extends FieldValues>({
   type,
   schema,
   defaultValues,
   onSubmit,
-}: Props<T>) => {
+}: Props<T>) {
   const isSignedIn = type === "SIGN_IN";
 
   const form: UseFormReturn<T> = useForm({
@@ -60,15 +61,6 @@ const AuthForm = <T extends FieldValues>({
       // Handle error (e.g., display error message)
       console.error(result.error);
     }
-  };
-
-  // Optional: Define a mapping for field labels if you have specific labels
-  // Otherwise, the field name will be used with the first letter capitalized
-  const FIELD_NAMES: Partial<Record<keyof T, string>> = {
-    // Example:
-    // username: "Username",
-    // email: "Email Address",
-    // Add more mappings as needed
   };
 
   return (
@@ -100,18 +92,24 @@ const AuthForm = <T extends FieldValues>({
                     {field.name === "universityCard" ? (
                       <ImageUpload />
                     ) : (
-                      <Input required type={
-                        {FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]}
-                      } {...field} />
+                      <Input
+                        required
+                        type={
+                          FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]
+                        }
+                        {...field}
+                        className="form-input"
+                      />
                     )}
                   </FormControl>
-                  <FormDescription>{`This is your ${field}.`}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           ))}
-          <Button type="submit">Submit</Button>
+          <Button type="submit" className="form-btn">
+            {isSignedIn ? "Sign In" : "Sign Up"}
+          </Button>
         </form>
         <p className="text-center text-base font-medium">
           {isSignedIn ? "New to BookWise! " : "Already have an account? "}
@@ -126,6 +124,6 @@ const AuthForm = <T extends FieldValues>({
       </Form>
     </div>
   );
-};
+}
 
 export default AuthForm;
