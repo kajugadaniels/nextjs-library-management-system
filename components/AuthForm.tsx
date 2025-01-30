@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import ImageUpload from "@/components/ImageUpload";
 
 interface Props<T extends FieldValues> {
   schema: ZodType<T>;
@@ -32,13 +33,11 @@ interface Props<T extends FieldValues> {
 }
 
 // Removed unused formSchema since schema is passed as a prop
-/*
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
 });
-*/
 
 const AuthForm = <T extends FieldValues>({
   type,
@@ -98,7 +97,13 @@ const AuthForm = <T extends FieldValues>({
                     {FIELD_NAMES[field.name as keyof typeof FIELD_NAMES]}
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder={`Enter your ${field}`} {...field} />
+                    {field.name === "universityCard" ? (
+                      <ImageUpload />
+                    ) : (
+                      <Input required type={
+                        {FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]}
+                      } {...field} />
+                    )}
                   </FormControl>
                   <FormDescription>{`This is your ${field}.`}</FormDescription>
                   <FormMessage />
